@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile & Security | Secure Vault</title>
+    <link rel="stylesheet" href="../css/user-dashboard.css">
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <aside class="sidebar">
+        <div class="logo">
+            <h2>🔐 Secure Vault</h2>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="user-dashboard.html" class="nav-link">
+                🏠 Dashboard
+            </a>
+
+            <a href="credentials.html" class="nav-link">
+                🔑 My Credentials
+            </a>
+
+            <a href="password-generator.html" class="nav-link">
+                ⚙️ Password Generator
+            </a>
+
+            <a href="password-checker.html" class="nav-link">
+                🛡️ Password Strength
+            </a>
+
+            <a href="breach-detection.html" class="nav-link active">
+                🚨 Breach Detection
+            </a>
+
+            <a href="shared-credentials.html" class="nav-link">
+                🤝 Shared Credentials
+            </a>
+
+            <a href="sharing-history.html" class="nav-link">
+                📋 Sharing History
+            </a>
+
+            <a href="profile-security.html" class="nav-link">
+                👤 Profile & Security
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button type="button" id="logoutBtn">Logout</button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="dashboard-header">
+            <div>
+                <h1>Profile & Security</h1>
+                <p>Manage your account information and password security.</p>
+            </div>
+        </header>
+
+        <section class="content-card">
+
+            <div class="profile-section">
+                <h2>Profile Information</h2>
+
+                <div class="profile-details">
+
+                    <div class="profile-field">
+                        <label>Full Name</label>
+                        <p id="profileName">Loading...</p>
+                    </div>
+
+                    <div class="profile-field">
+                        <label>Email Address</label>
+                        <p id="profileEmail">Loading...</p>
+                    </div>
+
+                    <div class="profile-field">
+                        <label>Account Role</label>
+                        <p id="profileRole">USER</p>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="profile-section">
+
+                <h2>Change Password</h2>
+                <p>Update your password to keep your account secure.</p>
+
+                <form id="changePasswordForm">
+
+                    <label for="currentPassword">Current Password</label>
+                    <input
+                            type="password"
+                            id="currentPassword"
+                            placeholder="Enter current password"
+                            autocomplete="current-password"
+                            required
+                    >
+
+                    <label for="newPassword">New Password</label>
+                    <input
+                            type="password"
+                            id="newPassword"
+                            placeholder="Enter new password"
+                            autocomplete="new-password"
+                            minlength="8"
+                            required
+                    >
+
+                    <label for="confirmNewPassword">Confirm New Password</label>
+                    <input
+                            type="password"
+                            id="confirmNewPassword"
+                            placeholder="Confirm new password"
+                            autocomplete="new-password"
+                            minlength="8"
+                            required
+                    >
+
+                    <button type="submit" id="changePasswordBtn">
+                        Change Password
+                    </button>
+
+                    <p id="changePasswordMessage"></p>
+
+                </form>
+
+            </div>
+
+            <div class="profile-section">
+
+                <h2>Security Information</h2>
+
+                <div class="security-info">
+
+                    <p>
+                        <strong>Password Protection:</strong>
+                        <span>Enabled</span>
+                    </p>
+
+                    <p>
+                        <strong>Authentication:</strong>
+                        <span>JWT-based authentication</span>
+                    </p>
+
+                    <p>
+                        <strong>Credential Encryption:</strong>
+                        <span>AES-256-GCM</span>
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="../javascript/profile-security.js"></script>
+<script src="../javascript/logout.js"></script>
+</body>
+</html>

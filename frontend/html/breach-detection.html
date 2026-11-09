@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breach Detection | Secure Vault</title>
+    <link rel="stylesheet" href="../css/user-dashboard.css">
+</head>
+<body>
+
+<div class="dashboard-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <a href="user-dashboard.html" class="logo">
+            🔐 SecureVault
+        </a>
+
+        <nav class="sidebar-nav">
+            <a href="user-dashboard.html" class="nav-link">
+                🏠 Dashboard
+            </a>
+
+            <a href="credentials.html" class="nav-link">
+                🔑 My Credentials
+            </a>
+
+            <a href="password-generator.html" class="nav-link">
+                ⚙️ Password Generator
+            </a>
+
+            <a href="password-checker.html" class="nav-link">
+                🛡️ Password Strength
+            </a>
+
+            <a href="breach-detection.html" class="nav-link active">
+                🚨 Breach Detection
+            </a>
+
+            <a href="shared-credentials.html" class="nav-link">
+                🤝 Shared Credentials
+            </a>
+
+            <a href="sharing-history.html" class="nav-link">
+                📋 Sharing History
+            </a>
+
+            <a href="profile-security.html" class="nav-link">
+                👤 Profile & Security
+            </a>
+        </nav>
+
+        <button id="logoutBtn" class="logout-btn">
+            🚪 Logout
+        </button>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content breach-page">
+
+        <header class="dashboard-header">
+            <div>
+                <h1>Breach Detection</h1>
+                <p>Check whether your saved passwords have appeared in known data breaches.</p>
+            </div>
+        </header>
+
+
+        <!-- INFORMATION SECTION -->
+        <section class="content-section">
+
+            <div class="section-heading">
+                <h2>Password Security Scan</h2>
+            </div>
+
+            <p>
+                SecureVault checks your saved passwords against known compromised
+                password records using the Have I Been Pwned Pwned Passwords service.
+                Your actual passwords are not sent to the service.
+            </p>
+
+            <button id="scanBreachesBtn" class="primary-btn">
+                🔍 Scan My Saved Passwords
+            </button>
+
+            <p id="scanStatus" class="status-message">
+                Click the scan button to check your saved passwords.
+            </p>
+
+        </section>
+
+
+        <!-- SECURITY WARNING -->
+        <div id="breachWarning" class="breach-warning" hidden>
+
+            <div class="warning-icon">⚠️</div>
+
+            <div>
+                <h3>Security Alert: Compromised Passwords Detected!</h3>
+
+                <p id="breachWarningMessage">
+                    Some of your saved passwords have appeared in known data breaches.
+                    Change them immediately to improve your account security.
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- STATISTICS -->
+        <section class="stats-grid">
+
+            <div class="stat-card">
+                <div class="stat-icon">🔍</div>
+                <h3>Passwords Checked</h3>
+                <h2 id="passwordsChecked">0</h2>
+                <p>Total passwords scanned</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">🚨</div>
+                <h3>Compromised Passwords</h3>
+                <h2 id="compromisedPasswords">0</h2>
+                <p>Passwords found in breach records</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">✅</div>
+                <h3>Safe Passwords</h3>
+                <h2 id="safePasswords">0</h2>
+                <p>Passwords not found in checked records</p>
+            </div>
+
+        </section>
+
+
+        <!-- SCAN RESULTS -->
+        <section class="content-section">
+
+            <div class="section-heading">
+                <h2>Scan Results</h2>
+                <span id="resultCount">0 results</span>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Website / Account</th>
+                        <th>Scan Status</th>
+                        <th>Breach Occurrences</th>
+                        <th>Recommendation</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="breachResultsBody">
+                    <tr>
+                        <td colspan="4" style="text-align:center;">
+                            No scan results available. Start a scan to see results.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="../javascript/logout.js"></script>
+<script src="../javascript/breach-detection.js"></script>
+
+</body>
+</html>
