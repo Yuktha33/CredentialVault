@@ -99,8 +99,10 @@ public class SecurityConfig {
         return http.build();
 
     }
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOrigins(List.of(
@@ -110,12 +112,19 @@ public class SecurityConfig {
                 "http://127.0.0.1:63342"
         ));
 
+        // Added PATCH
         config.setAllowedMethods(List.of(
-                "GET", "POST", "PUT", "DELETE", "OPTIONS"
+                "GET",
+                "POST",
+                "PUT",
+                "PATCH",
+                "DELETE",
+                "OPTIONS"
         ));
 
         config.setAllowedHeaders(List.of(
-                "Authorization", "Content-Type"
+                "Authorization",
+                "Content-Type"
         ));
 
         config.setAllowCredentials(false);
@@ -124,7 +133,9 @@ public class SecurityConfig {
                 new UrlBasedCorsConfigurationSource();
 
         source.registerCorsConfiguration("/**", config);
+
         return source;
     }
+
 
 }

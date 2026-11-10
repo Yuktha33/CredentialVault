@@ -1,18 +1,12 @@
-// ========================================
-// SECURE VAULT - USER DASHBOARD
-// ========================================
 
 const API_BASE_URL = "http://localhost:8080";
-
-// ========================================
-// 1. AUTHENTICATION
-// ========================================
 
 function getToken() {
     return localStorage.getItem("vaultToken");
 }
 
 function checkAuthentication() {
+
     if (!getToken()) {
         alert("Please login to continue.");
         window.location.href = "login.html";
@@ -22,9 +16,7 @@ function checkAuthentication() {
     return true;
 }
 
-// ========================================
-// 2. API REQUEST
-// ========================================
+
 
 async function dashboardApiRequest(url) {
 
@@ -45,9 +37,6 @@ async function dashboardApiRequest(url) {
     return response.json();
 }
 
-// ========================================
-// 3. DASHBOARD STATISTICS
-// ========================================
 
 async function loadDashboardStatistics() {
 
@@ -77,13 +66,18 @@ async function loadDashboardStatistics() {
             : 0;
 
         const sevenDaysAgo = new Date();
-        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+        sevenDaysAgo.setDate(
+            sevenDaysAgo.getDate() - 7
+        );
 
         const recent = Array.isArray(credentials)
             ? credentials.filter(item => {
+
                 if (!item.createdAt) return false;
 
                 return new Date(item.createdAt) >= sevenDaysAgo;
+
             }).length
             : 0;
 
@@ -109,11 +103,56 @@ async function loadDashboardStatistics() {
     }
 }
 
-// ========================================
-// 4. LOGOUT
-// ========================================
 
-const logoutBtn = document.getElementById("logoutBtn");
+
+async function loadUnreadNotificationCount() {
+
+    const badge =
+        document.getElementById("notificationBadge");
+
+    if (!badge) return;
+
+    try {
+
+        const result = await dashboardApiRequest(
+            "/api/user/notifications/unread-count"
+        );
+
+        const unreadCount = Number(result);
+
+        if (!Number.isFinite(unreadCount)) {
+            throw new Error("Invalid unread notification count.");
+        }
+
+        if (unreadCount > 0) {
+
+            badge.textContent = unreadCount > 99
+                ? "99+"
+                : unreadCount;
+
+            badge.style.display = "inline-flex";
+
+        } else {
+
+            badge.textContent = "0";
+            badge.style.display = "none";
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Notification count error:",
+            error
+        );
+
+        badge.style.display = "none";
+    }
+}
+
+
+
+const logoutBtn =
+    document.getElementById("logoutBtn");
 
 if (logoutBtn) {
 
@@ -133,15 +172,16 @@ if (logoutBtn) {
     });
 }
 
-// ========================================
-// 5. INITIALIZE DASHBOARD
-// ========================================
+
 
 document.addEventListener("DOMContentLoaded", () => {
 
     if (!checkAuthentication()) return;
 
     loadDashboardStatistics();
+
+    // Load unread security notification count
+    loadUnreadNotificationCount();
 
 });
 

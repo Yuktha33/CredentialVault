@@ -1,8 +1,4 @@
 
-/* ========================================
-   SECURE VAULT - GLOBAL DESIGN
-======================================== */
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
@@ -43,9 +39,7 @@ body {
     min-height: 100vh;
 }
 
-/* ========================================
-   SIDEBAR
-======================================== */
+
 
 .sidebar {
     width: 255px;
@@ -98,9 +92,7 @@ body {
     color: white;
 }
 
-/* ========================================
-   MAIN CONTENT
-======================================== */
+
 
 .main-content {
     flex: 1;
@@ -129,9 +121,7 @@ body {
     margin-top: 7px;
 }
 
-/* ========================================
-   CARDS
-======================================== */
+
 
 .card,
 .stat-card,
@@ -163,9 +153,7 @@ body {
     color: var(--primary);
 }
 
-/* ========================================
-   FORMS
-======================================== */
+
 
 form {
     background: var(--surface);
@@ -217,9 +205,7 @@ textarea {
     resize: vertical;
 }
 
-/* ========================================
-   BUTTONS
-======================================== */
+
 
 button,
 .btn {
@@ -259,9 +245,7 @@ button.success {
     background: #dc2626;
 }
 
-/* ========================================
-   CREDENTIAL LIST
-======================================== */
+
 
 #credentialList,
 #sharedCredentialList,
@@ -287,9 +271,7 @@ button.success {
     margin: 8px 7px 0 0;
 }
 
-/* ========================================
-   CATEGORY FILTERS
-======================================== */
+
 
 .category-item {
     padding: 12px 15px;
@@ -323,9 +305,7 @@ button.success {
     line-height: 2;
 }
 
-/* ========================================
-   PASSWORD GENERATOR
-======================================== */
+
 
 #generatedPassword {
     font-weight: 600;
@@ -344,9 +324,6 @@ label:has(input[type="checkbox"]) {
     margin-bottom: 15px;
 }
 
-/* ========================================
-   MESSAGES
-======================================== */
 
 #vaultMessage,
 #changePasswordMessage {
@@ -363,9 +340,6 @@ label:has(input[type="checkbox"]) {
     color: var(--danger);
 }
 
-/* ========================================
-   PROFILE
-======================================== */
 
 .profile-info {
     display: grid;
@@ -381,9 +355,6 @@ label:has(input[type="checkbox"]) {
     color: var(--text);
 }
 
-/* ========================================
-   RESPONSIVE DESIGN
-======================================== */
 
 @media (max-width: 1000px) {
     .sidebar {

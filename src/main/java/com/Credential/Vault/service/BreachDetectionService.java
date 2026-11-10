@@ -3,6 +3,8 @@ package com.Credential.Vault.service;
 
 import com.Credential.Vault.entity.Credential;
 import com.Credential.Vault.entity.User;
+import com.Credential.Vault.entity.Role;
+
 import com.Credential.Vault.repository.CredentialRepository;
 import com.Credential.Vault.repository.UserRepository;
 
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class BreachDetectionService {
@@ -35,7 +38,7 @@ public class BreachDetectionService {
         this.hibpService = hibpService;
     }
 
-    // Result returned to the frontend.
+    // Result for individual user scanning
     public record ScanResult(
             Long credentialId,
             String title,
@@ -45,27 +48,43 @@ public class BreachDetectionService {
             LocalDateTime scannedAt
     ) {}
 
+    // Result for Admin global scanning
+    public record AdminScanResult(
+            Long userId,
+            String userName,
+            String userEmail,
+            Long credentialId,
+            String title,
+            String website,
+            boolean breached,
+            long occurrences,
+            LocalDateTime scannedAt,
+            String scanId
+    ) {}
+
+    // ==========================================
+    // USER-SPECIFIC BREACH SCAN
+    // ==========================================
+
     @Transactional(readOnly = true)
     public List<ScanResult> scanPasswords(String email) {
 
-        // 1. Identify logged-in user.
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
                         new IllegalArgumentException("User not found"));
 
-        // 2. Retrieve only this user's credentials.
         List<Credential> credentials =
                 credentialRepository.findByOwnerOrderByCreatedAtDesc(user);
 
         List<ScanResult> results = new ArrayList<>();
 
-        // Avoid checking duplicate passwords repeatedly.
         Map<String, HIBPService.BreachResult> cache =
                 new HashMap<>();
 
+        LocalDateTime scanTime = LocalDateTime.now();
+
         for (Credential credential : credentials) {
 
-            // 3. Decrypt password inside backend only.
             String password = encryptionService.decrypt(
                     credential.getEncryptedPassword()
             );
@@ -77,22 +96,88 @@ public class BreachDetectionService {
                 );
             }
 
-            // 4. Check HIBP, reusing duplicate password results.
             HIBPService.BreachResult breachResult =
                     cache.computeIfAbsent(
                             password,
                             hibpService::checkPassword
                     );
 
-            // 5. Return metadata only, never the password.
             results.add(new ScanResult(
                     credential.getId(),
                     credential.getTitle(),
                     credential.getWebsite(),
                     breachResult.breached(),
                     breachResult.occurrences(),
-                    LocalDateTime.now()
+                    scanTime
             ));
+        }
+
+        return results;
+    }
+
+    // ==========================================
+    // ADMIN GLOBAL BREACH SCAN
+    // ==========================================
+
+    @Transactional(readOnly = true)
+    public List<AdminScanResult> scanAllUsers() {
+
+        // Retrieve only regular USER accounts
+        List<User> users = userRepository.findByRole(Role.USER);
+
+        List<AdminScanResult> results = new ArrayList<>();
+
+        // Reuse results for duplicate passwords
+        Map<String, HIBPService.BreachResult> cache =
+                new HashMap<>();
+
+        LocalDateTime scanTime = LocalDateTime.now();
+
+        // Generate a unique ID for this scan
+        String scanId = UUID.randomUUID().toString();
+
+        for (User user : users) {
+
+            // Retrieve credentials belonging to this user
+            List<Credential> credentials =
+                    credentialRepository
+                            .findByOwnerOrderByCreatedAtDesc(user);
+
+            for (Credential credential : credentials) {
+
+                // Decrypt only inside backend memory
+                String password = encryptionService.decrypt(
+                        credential.getEncryptedPassword()
+                );
+
+                if (password == null || password.isEmpty()) {
+                    throw new IllegalStateException(
+                            "Unable to scan credential ID: "
+                                    + credential.getId()
+                    );
+                }
+
+                // Check password against HIBP
+                HIBPService.BreachResult breachResult =
+                        cache.computeIfAbsent(
+                                password,
+                                hibpService::checkPassword
+                        );
+
+                // Return metadata only
+                results.add(new AdminScanResult(
+                        user.getId(),
+                        user.getName(),
+                        user.getEmail(),
+                        credential.getId(),
+                        credential.getTitle(),
+                        credential.getWebsite(),
+                        breachResult.breached(),
+                        breachResult.occurrences(),
+                        scanTime,
+                        scanId
+                ));
+            }
         }
 
         return results;
